@@ -1,0 +1,264 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+  INPROGRESS
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  password      String
+  image         String?
+  role          Role      @default(ALUMNI)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  status        UserStatus @default(PENDING)
+
+  profile       Profile?
+  events        Event[]   @relation("EventOrganizer")
+  attendingEvents Event[] @relation("EventAttendees")
+  memberships   Membership[]
+  notifications Notification[]
+  accounts      Account[]
+  sessions      Session[]
+  eventPayments EventPayment[] // Add this line
+}
+
+model Profile {
+  id                String           @id @default(cuid())
+  userId            String           @unique
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fatherName        String?
+  motherName        String?
+  presentAddress    String?
+  permanentAddress  String?
+  mobileNumber      String?
+  birthday         DateTime?
+  nationality      String?
+  religion         String?
+  sscRegNumber     String?
+  sscRollNumber    String?
+  passingYear      Int?
+  occupation       String?
+  employerName     String?
+  designation      String?
+  employerAddress  String?
+  reference        String?
+  signature        String?
+  photo            String?
+  socialLinks      Json?
+  membershipStatus MembershipStatus @default(PENDING)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([userId])
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  capacity    Int?
+  image       String
+  isPaid      Boolean  @default(false)
+  price       Float?
+  organizerId String
+  organizer   User     @relation("EventOrganizer", fields: [organizerId], references: [id])
+  attendees   User[]   @relation("EventAttendees")
+  membershipRequired String?
+  payments    EventPayment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([organizerId])
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model EventPayment {
+  id            String        @id @default(cuid())
+  eventId       String
+  event         Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount        Float
+  paymentMethod String        // BANK, BKASH, NAGAD, ROCKET
+  transactionId String
+  status        PaymentStatus @default(PENDING)
+  proof         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([eventId])
+  @@index([userId])
+}
+
+enum MembershipType {
+  GENERAL
+  DONOR
+  LIFETIME_DONOR
+}
+
+enum BillingPeriod {
+  WEEKLY
+  MONTHLY
+  YEARLY
+  ONE_TIME
+}
+
+model MembershipTier {
+  id          String        @id @default(cuid())
+  name        String
+  type        MembershipType
+  period      BillingPeriod
+  amount      Float
+  description String?       @db.Text
+  benefits    String[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  memberships Membership[]
+}
+
+enum PaymentMethod {
+  BANK
+  BKASH
+  NAGAD
+  ROCKET
+}
+
+model Membership {
+  id            String          @id @default(cuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tierId        String
+  tier          MembershipTier @relation(fields: [tierId], references: [id])
+  startDate     DateTime       @default(now())
+  endDate       DateTime?
+  status        MembershipStatus @default(ACTIVE)
+  amount        Float
+  paymentMethod PaymentMethod?
+  transactionId String?
+  paymentDetails String?       @db.Text
+  paymentProof  String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([tierId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String   @db.Text
+  type      NotificationType
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+enum Role {
+  ADMIN
+  ALUMNI
+}
+
+enum MembershipStatus {
+  ACTIVE
+  EXPIRED
+  PENDING
+  CANCELLED
+}
+
+enum NotificationType {
+  EVENT
+  MEMBERSHIP
+  SYSTEM
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_token     String? @db.Text
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Committee {
+  id          String   @id @default(cuid())
+  name        String
+  designation String
+  image       String
+  order       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Album {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  photos      Gallery[]
+}
+
+model Gallery {
+  id          String   @id @default(cuid())
+  title       String
+  image       String
+  category    String
+  order       Int      @default(0)
+  albumId     String?
+  album       Album?   @relation(fields: [albumId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([albumId])
+}
