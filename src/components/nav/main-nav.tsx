@@ -51,7 +51,7 @@ export function MainNav() {
       >
         Gallery
       </Link>
-      <Link
+      {session ? (<Link
         href="/directory"
         className={`text-sm font-medium transition-colors hover:text-primary ${
           isActive('/directory')
@@ -60,7 +60,7 @@ export function MainNav() {
         }`}
       >
         Directory
-      </Link>
+      </Link>) : null}
       <Link
         href="/contact"
         className={`text-sm font-medium transition-colors hover:text-primary ${

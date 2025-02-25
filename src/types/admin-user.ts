@@ -1,3 +1,5 @@
+import { MembershipStatus, MembershipType, PaymentMethod } from "@prisma/client";
+
 export type UserColumn = {
   id: string;
   name: string | null;
@@ -6,6 +8,17 @@ export type UserColumn = {
   status: string;
   image: string | null;
   createdAt: Date;
+  membership: {
+    type: MembershipType,
+    status: MembershipStatus;
+    amount: number;
+    paymentMethod: PaymentMethod | null;
+    transactionId: string | null;
+    paymentDetails: string | null;
+    paymentProof: string | null;
+    startDate: Date;
+    endDate: Date | null;
+  } | null;
   profile?: {
     mobileNumber: string | null;
     occupation: string | null;
@@ -24,6 +37,7 @@ export type UserColumn = {
     employerAddress: string | null;
     reference: string | null;
     signature: string | null;
+    membershipType?: MembershipType | null;
   } | null;
 };
 

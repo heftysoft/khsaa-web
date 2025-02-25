@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import EventContent from "./event-content";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { Event } from "@/types/event";
 
 function EventDetails({ eventId }: { eventId: string }) {
@@ -59,16 +59,13 @@ function EventDetails({ eventId }: { eventId: string }) {
         throw new Error(await res.text());
       }
       await fetchEvent();
-      toast({
-        title: "Successfully joined event!",
+      toast.success("Successfully joined event!", {
         description: "You will receive an email confirmation shortly.",
       });
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error('Error', {
         description: "Failed to join event",
-        variant: "destructive",
       });
     } finally {
       setIsJoining(false);
@@ -77,10 +74,8 @@ function EventDetails({ eventId }: { eventId: string }) {
 
   const handlePaymentSubmit = async () => {
     if (!paymentMethod || !transactionId || !paymentProof) {
-      toast({
-        title: "Error",
+      toast.error('Error', {
         description: "Please fill in all payment details",
-        variant: "destructive",
       });
       return;
     }
@@ -112,8 +107,7 @@ function EventDetails({ eventId }: { eventId: string }) {
         throw new Error(await res.text());
       }
 
-      toast({
-        title: "Payment Submitted",
+      toast('Payment Submitted', {
         description: "Your registration is pending admin approval.",
       });
 
@@ -121,10 +115,8 @@ function EventDetails({ eventId }: { eventId: string }) {
       await fetchEvent();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error('Error', {
         description: "Failed to submit payment",
-        variant: "destructive",
       });
     } finally {
       setIsSubmittingPayment(false);
@@ -142,18 +134,15 @@ function EventDetails({ eventId }: { eventId: string }) {
         throw new Error("Failed to cancel registration");
       }
 
-      toast({
-        title: "Registration Cancelled",
+      toast.success("Registration Cancelled", {
         description: "You have been removed from the event.",
       });
 
       await fetchEvent();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error('Error', {
         description: "Failed to cancel registration",
-        variant: "destructive",
       });
     } finally {
       setIsCanceling(false);

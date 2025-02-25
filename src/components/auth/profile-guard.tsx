@@ -12,16 +12,29 @@ export function ProfileGuard({ children }: { children: React.ReactNode }) {
   const [isAuthorized, setIsAuthorized] = useState(false);
   
   const isProfilePage = pathname.startsWith('/dashboard/profile');
+  const isMembershipPage = pathname.startsWith('/dashboard/membership');
 
   useEffect(() => {
     if (session?.user) {
-      if (session.user.status !== 'VERIFIED' && !isProfilePage) {
-        router.push('/dashboard/profile');
-      } else {
+      const { status } = session.user;
+
+      if (status === 'VERIFIED') {
         setIsAuthorized(true);
+      } else if (status === 'PAYMENT_PENDING') {
+        if (isMembershipPage) {
+          setIsAuthorized(true);
+        } else {
+          router.push('/dashboard/membership');
+        }
+      } else {
+        if (isProfilePage) {
+          setIsAuthorized(true);
+        } else {
+          router.push('/dashboard/profile');
+        }
       }
     }
-  }, [session, isProfilePage, router]);
+  }, [session, isProfilePage, isMembershipPage, router]);
 
   if (!isAuthorized) {
     return <LoadingSpinner />;

@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import {
   Select,
   SelectContent,
@@ -72,10 +72,8 @@ export default function AdminGalleryPage() {
       setPhotos(photosData);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to fetch data',
-        variant: 'destructive',
       });
     }
   };
@@ -99,17 +97,14 @@ export default function AdminGalleryPage() {
 
       if (!res.ok) throw new Error('Failed to create album');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Album created successfully'});
       fetchData();
       (e.target as HTMLFormElement).reset();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to create album',
-        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -145,8 +140,7 @@ export default function AdminGalleryPage() {
 
       if (!res.ok) throw new Error('Failed to add photo');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description:'Photo added successfully'
       });
       fetchData();
@@ -154,10 +148,8 @@ export default function AdminGalleryPage() {
       setImage(null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to add photo',
-        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -180,18 +172,15 @@ export default function AdminGalleryPage() {
 
       if (!res.ok) throw new Error('Failed to update photo');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Photo updated successfully',
       });
       setEditingPhoto(null);
       fetchData();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to update photo',
-        variant: 'destructive',
       });
     }
   };
@@ -213,18 +202,15 @@ export default function AdminGalleryPage() {
 
       if (!res.ok) throw new Error('Failed to update album');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Album updated successfully'
       });
       setEditingAlbum(null);
       fetchData();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to update album',
-        variant: 'destructive',
       });
     }
   };
@@ -237,17 +223,14 @@ export default function AdminGalleryPage() {
 
       if (!res.ok) throw new Error('Failed to delete photo');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Photo deleted successfully'
       });
       fetchData();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to delete photo',
-        variant: 'destructive',
       });
     }
   };
@@ -260,17 +243,14 @@ export default function AdminGalleryPage() {
 
       if (!res.ok) throw new Error('Failed to delete album');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Album deleted successfully'
       });
       fetchData();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to delete album',
-        variant: 'destructive',
       });
     }
   };

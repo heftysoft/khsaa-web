@@ -28,7 +28,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { Switch } from "@/components/ui/switch";
 
 interface Event {
@@ -64,10 +64,8 @@ export default function AdminEventsPage() {
       setEvents(data);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to fetch events',
-        variant: 'destructive',
       });
     }
   };
@@ -100,8 +98,7 @@ export default function AdminEventsPage() {
 
       if (!res.ok) throw new Error('Failed to create event');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Event created successfully',
       });
       fetchEvents();
@@ -109,10 +106,8 @@ export default function AdminEventsPage() {
       setImage(null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to create event',
-        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -148,8 +143,7 @@ export default function AdminEventsPage() {
 
       if (!res.ok) throw new Error('Failed to update event');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Event updated successfully',
       });
       setEditingEvent(null);
@@ -157,10 +151,8 @@ export default function AdminEventsPage() {
       fetchEvents();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to update event',
-        variant: 'destructive',
       });
     }
   };
@@ -175,17 +167,14 @@ export default function AdminEventsPage() {
 
       if (!res.ok) throw new Error('Failed to delete event');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Event deleted successfully',
       });
       fetchEvents();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to delete event',
-        variant: 'destructive',
       });
     }
   };
@@ -233,7 +222,8 @@ export default function AdminEventsPage() {
                 <SelectContent>
                   <SelectItem value="NONE">None</SelectItem>
                   <SelectItem value="GENERAL">General</SelectItem>
-                  <SelectItem value="DONOR">Donor</SelectItem>
+                  <SelectItem value="HONORABLE">Honorable</SelectItem>
+                  <SelectItem value="LIFETIME">Lifetime</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -452,7 +442,8 @@ export default function AdminEventsPage() {
                 <SelectContent>
                   <SelectItem value="NONE">None</SelectItem>
                   <SelectItem value="GENERAL">General</SelectItem>
-                  <SelectItem value="DONOR">Donor</SelectItem>
+                  <SelectItem value="HONORABLE">Honorable</SelectItem>
+                  <SelectItem value="LIFETIME">Lifetime</SelectItem>
                 </SelectContent>
               </Select>
             </div>

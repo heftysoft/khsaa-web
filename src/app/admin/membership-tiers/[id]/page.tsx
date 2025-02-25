@@ -27,7 +27,7 @@ import { toast } from 'sonner';
 
 const formSchema = z.object({
   name: z.string().min(2),
-  type: z.enum(['GENERAL', 'DONOR', 'LIFETIME_DONOR']),
+  type: z.enum(['GENERAL', 'HONORABLE', 'LIFETIME']),
   period: z.enum(['WEEKLY', 'MONTHLY', 'YEARLY', 'ONE_TIME']),
   amount: z.coerce.number().min(0),
   description: z.string().optional(),
@@ -129,9 +129,9 @@ export default function TierForm({ params }: { params: Promise<{ id: string }> }
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="GENERAL">General</SelectItem>
-                      <SelectItem value="DONOR">Donor</SelectItem>
-                      <SelectItem value="LIFETIME_DONOR">Lifetime Donor</SelectItem>
+                      <SelectItem value="GENERAL">General Member</SelectItem>
+                      <SelectItem value="HONORABLE">Honorable Member</SelectItem>
+                      <SelectItem value="LIFETIME">Lifetime Member</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -169,7 +169,7 @@ export default function TierForm({ params }: { params: Promise<{ id: string }> }
             name="amount"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Amount ($)</FormLabel>
+                <FormLabel>Amount (৳)</FormLabel>
                 <FormControl>
                   <Input type="number" step="0.01" {...field} />
                 </FormControl>
@@ -204,7 +204,7 @@ export default function TierForm({ params }: { params: Promise<{ id: string }> }
                 <FormControl>
                   <Textarea
                     placeholder="Access to alumni directory&#10;Newsletter subscription&#10;Event participation"
-                    value={field.value.join('\n')}
+                    defaultValue={field.value.join('\n')}
                     onChange={e => field.onChange(e.target.value.split('\n').filter(Boolean))}
                   />
                 </FormControl>

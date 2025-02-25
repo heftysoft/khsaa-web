@@ -1,11 +1,11 @@
 -- CreateEnum
-CREATE TYPE "UserStatus" AS ENUM ('PENDING', 'VERIFIED', 'REJECTED', 'INPROGRESS');
+CREATE TYPE "UserStatus" AS ENUM ('PENDING', 'VERIFIED', 'REJECTED', 'INPROGRESS', 'PAYMENT_PENDING');
 
 -- CreateEnum
 CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
-CREATE TYPE "MembershipType" AS ENUM ('GENERAL', 'DONOR', 'LIFETIME_DONOR');
+CREATE TYPE "MembershipType" AS ENUM ('GENERAL', 'HONORABLE', 'LIFETIME');
 
 -- CreateEnum
 CREATE TYPE "BillingPeriod" AS ENUM ('WEEKLY', 'MONTHLY', 'YEARLY', 'ONE_TIME');
@@ -61,6 +61,7 @@ CREATE TABLE "Profile" (
     "signature" TEXT,
     "photo" TEXT,
     "socialLinks" JSONB,
+    "membershipType" "MembershipType" NOT NULL DEFAULT 'GENERAL',
     "membershipStatus" "MembershipStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -215,6 +216,19 @@ CREATE TABLE "Gallery" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Gallery_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PaymentInfo" (
+    "id" TEXT NOT NULL DEFAULT '1',
+    "bankInfo" TEXT NOT NULL,
+    "bkashInfo" TEXT NOT NULL,
+    "nagadInfo" TEXT NOT NULL,
+    "rocketInfo" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "PaymentInfo_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable

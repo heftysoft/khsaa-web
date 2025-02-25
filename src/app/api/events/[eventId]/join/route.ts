@@ -38,7 +38,7 @@ export async function POST(
           status: 'ACTIVE',
           tier: {
             type: {
-              in: [event.membershipRequired as MembershipType, 'LIFETIME_DONOR'],
+              in: [event.membershipRequired as MembershipType, 'LIFETIME'],
             },
           },
         },

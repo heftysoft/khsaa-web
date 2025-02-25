@@ -16,7 +16,7 @@ export function MembershipTiers({ tiers, onSelect, selectedTierId }: MembershipT
         <Card key={tier.id} className={`relative ${selectedTierId === tier.id ? 'border-primary' : ''}`}>
           <CardHeader>
             <CardTitle>{tier.name}</CardTitle>
-            <p className="text-2xl font-bold">${tier.amount}</p>
+            <p className="text-2xl font-bold">৳{tier.amount}</p>
             <p className="text-sm text-muted-foreground">
               {tier.period === 'ONE_TIME' ? 'One-time payment' : `per ${tier.period.toLowerCase()}`}
             </p>

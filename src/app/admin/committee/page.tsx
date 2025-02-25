@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -47,10 +47,8 @@ export default function CommitteePage() {
       setMembers(data);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to fetch committee members',
-        variant: 'destructive',
       });
     }
   };
@@ -81,8 +79,7 @@ export default function CommitteePage() {
 
       if (!res.ok) throw new Error('Failed to add committee member');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Committee member added successfully',
       });
       router.refresh();
@@ -90,10 +87,8 @@ export default function CommitteePage() {
       setImage(null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to add committee member',
-        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -132,8 +127,7 @@ export default function CommitteePage() {
 
       if (!res.ok) throw new Error('Failed to update member');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Member updated successfully',
       });
       setEditingMember(null);
@@ -141,10 +135,8 @@ export default function CommitteePage() {
       fetchMembers();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to update member',
-        variant: 'destructive',
       });
     }
   };
@@ -159,16 +151,13 @@ export default function CommitteePage() {
 
       if (!res.ok) throw new Error('Failed to delete member');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Member deleted successfully'});
       fetchMembers();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to delete member',
-        variant: 'destructive',
     });
     }
   };

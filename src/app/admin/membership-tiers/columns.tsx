@@ -94,7 +94,7 @@ export const columns: ColumnDef<TierColumn>[] = [
     accessorKey: 'amount',
     header: 'Amount',
     cell: ({ row }) => {
-      return <div className="font-medium">${row.original.amount}</div>;
+      return <div className="font-medium">৳{row.original.amount}</div>;
     },
   },
   {

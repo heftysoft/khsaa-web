@@ -16,6 +16,8 @@ export default async function DashboardLayout({
   }
 
   const isVerified = session.user.status === 'VERIFIED';
+  const isPaymentPending = session.user.status === 'PAYMENT_PENDING';
+  const isInProgress = session.user.status === 'INPROGRESS';
 
   return (
     <ProfileGuard>
@@ -47,7 +49,9 @@ export default async function DashboardLayout({
                 Overview
               </Link>
               <Link
-                className={`group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground`}
+                className={`group flex items-center rounded-md px-3 py-2 text-sm font-medium ${
+                  isPaymentPending && !isInProgress ? 'opacity-50 pointer-events-none' : 'hover:bg-accent hover:text-accent-foreground'
+                }`}
                 href="/dashboard/profile"
               >
                 <svg
@@ -68,7 +72,7 @@ export default async function DashboardLayout({
               </Link>
               <Link
                 className={`group flex items-center rounded-md px-3 py-2 text-sm font-medium ${
-                  !isVerified ? 'opacity-50 pointer-events-none' : 'hover:bg-accent hover:text-accent-foreground'
+                  !isVerified  ? 'opacity-50 pointer-events-none' : 'hover:bg-accent hover:text-accent-foreground'
                 }`}
                 href="/dashboard/events"
               >
@@ -90,7 +94,7 @@ export default async function DashboardLayout({
               </Link>
               <Link
                 className={`group flex items-center rounded-md px-3 py-2 text-sm font-medium ${
-                  !isVerified ? 'opacity-50 pointer-events-none' : 'hover:bg-accent hover:text-accent-foreground'
+                  !isVerified && !isPaymentPending ? 'opacity-50 pointer-events-none' : 'hover:bg-accent hover:text-accent-foreground'
                 }`}
                 href="/dashboard/membership"
               >

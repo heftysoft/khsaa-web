@@ -49,6 +49,11 @@ const routes = [
     icon: CreditCard,
     href: '/admin/membership-tiers',
   },
+  {
+    label: 'Payment Info',
+    icon: TakaSvgIcon,
+    href: '/admin/payment-info',
+  },
 ];
 
 export function Sidebar() {

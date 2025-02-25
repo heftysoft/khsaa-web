@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { auth } from '@/lib/auth';
+import { NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import { auth } from "@/lib/auth";
+import { updateProfileMembershipType } from "@/lib/utils";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function POST(req: Request) {
@@ -8,7 +9,7 @@ export async function POST(req: Request) {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return new NextResponse('Unauthorized', { status: 401 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const currentMembership = await db.membership.findFirst({
@@ -16,7 +17,7 @@ export async function POST(req: Request) {
         userId: session.user.id,
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
       include: {
         tier: true,
@@ -24,22 +25,22 @@ export async function POST(req: Request) {
     });
 
     if (!currentMembership) {
-      return new NextResponse('No previous membership found', { status: 400 });
+      return new NextResponse("No previous membership found", { status: 400 });
     }
 
     const startDate = new Date();
     let endDate: Date | undefined;
 
-    if (currentMembership.tier.type !== 'LIFETIME_DONOR') {
+    if (currentMembership.tier.type !== "LIFETIME") {
       endDate = new Date();
       switch (currentMembership.tier.period) {
-        case 'WEEKLY':
+        case "WEEKLY":
           endDate.setDate(endDate.getDate() + 7);
           break;
-        case 'MONTHLY':
+        case "MONTHLY":
           endDate.setMonth(endDate.getMonth() + 1);
           break;
-        case 'YEARLY':
+        case "YEARLY":
           endDate.setFullYear(endDate.getFullYear() + 1);
           break;
       }
@@ -50,17 +51,17 @@ export async function POST(req: Request) {
         amount: currentMembership.tier.amount,
         startDate,
         endDate,
-        status: 'ACTIVE',
+        status: "ACTIVE",
         user: {
           connect: {
-            id: session.user.id
-          }
+            id: session.user.id,
+          },
         },
         tier: {
           connect: {
-            id: currentMembership.tier.id
-          }
-        }
+            id: currentMembership.tier.id,
+          },
+        },
       },
       include: {
         tier: true,
@@ -69,22 +70,30 @@ export async function POST(req: Request) {
 
     await db.notification.create({
       data: {
-        title: 'Membership Renewed',
+        title: "Membership Renewed",
         message: `Your ${currentMembership.tier.name} membership has been renewed${
-          endDate ? ` and will be valid until ${endDate.toLocaleDateString()}.` : '.'
+          endDate
+            ? ` and will be valid until ${endDate.toLocaleDateString()}.`
+            : "."
         }`,
-        type: 'MEMBERSHIP',
+        type: "MEMBERSHIP",
         user: {
           connect: {
-            id: session.user.id
-          }
-        }
+            id: session.user.id,
+          },
+        },
       },
     });
 
+    // Update profile membershipType
+    await updateProfileMembershipType(
+      session.user.id,
+      currentMembership.tier.type
+    );
+
     return NextResponse.json(membership);
   } catch (error) {
-    console.error('[MEMBERSHIP_RENEW]', error);
-    return new NextResponse('Internal Error', { status: 500 });
+    console.error("[MEMBERSHIP_RENEW]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

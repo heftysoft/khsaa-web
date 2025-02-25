@@ -11,7 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 interface Payment {
   id: string;
@@ -52,17 +52,14 @@ export default function EventPaymentsPage({ params }: { params: Promise<{ id: st
 
       if (!res.ok) throw new Error('Failed to update payment status');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Payment status updated successfully',
       });
       fetchPayments();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to update payment status',
-        variant: 'destructive',
       });
     }
   };
@@ -94,7 +91,7 @@ export default function EventPaymentsPage({ params }: { params: Promise<{ id: st
                   </div>
                 </div>
               </TableCell>
-              <TableCell>${payment.amount}</TableCell>
+              <TableCell>৳{payment.amount}</TableCell>
               <TableCell>{payment.paymentMethod}</TableCell>
               <TableCell>{payment.transactionId}</TableCell>
               <TableCell>

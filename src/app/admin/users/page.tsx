@@ -25,6 +25,18 @@ export default async function UsersPage() {
           employerAddress: true,
           reference: true,
           signature: true,
+          photo: true,
+          membershipType: true,
+          membershipStatus: true,
+        }
+      },
+      memberships: {
+        orderBy: {
+          createdAt: 'desc',
+        },
+        take: 1,
+        include: {
+          tier: true,
         }
       }
     },
@@ -44,6 +56,17 @@ export default async function UsersPage() {
     profile: user.profile ? {
       ...user.profile,
       birthday: user.profile.birthday?.toISOString() || null,
+    } : null,
+    membership: user.memberships[0] ? {
+      type: user.memberships[0].tier.type,
+      status: user.memberships[0].status,
+      amount: user.memberships[0].amount,
+      paymentMethod: user.memberships[0].paymentMethod,
+      transactionId: user.memberships[0].transactionId,
+      paymentDetails: user.memberships[0].paymentDetails,
+      paymentProof: user.memberships[0].paymentProof,
+      startDate: user.memberships[0].startDate,
+      endDate: user.memberships[0].endDate,
     } : null,
   }));
 

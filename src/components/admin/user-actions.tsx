@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { MoreHorizontal } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -32,17 +32,14 @@ export function UserActions({ user }: UserActionsProps) {
 
       if (!response.ok) throw new Error('Failed to verify user');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'User verified successfully',
       });
       window.location.reload();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to verify user',
-        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -58,17 +55,14 @@ export function UserActions({ user }: UserActionsProps) {
 
       if (!response.ok) throw new Error('Failed to reject user');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'User rejected successfully',
       });
       window.location.reload();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to reject user',
-        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -86,17 +80,14 @@ export function UserActions({ user }: UserActionsProps) {
 
       if (!response.ok) throw new Error('Failed to delete user');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'User deleted successfully',
       });
       window.location.reload();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to delete user',
-        variant: 'destructive',
       });
     } finally {
       setLoading(false);

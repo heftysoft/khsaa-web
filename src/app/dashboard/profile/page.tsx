@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import {
   Card,
   CardContent,
@@ -35,10 +35,8 @@ export default function ProfilePage() {
         setProfile(data);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        toast({
-          title: 'Error',
+        toast.error('Error', {
           description: 'Failed to fetch profile data',
-          variant: 'destructive',
         });
       }
     };
@@ -69,6 +67,19 @@ export default function ProfilePage() {
     try {
       const formData = new FormData(e.currentTarget);
       
+      // Handle social links
+      const socialLinks = {
+        facebook: formData.get('socialLinks.facebook'),
+        linkedin: formData.get('socialLinks.linkedin'),
+        twitter: formData.get('socialLinks.twitter'),
+        instagram: formData.get('socialLinks.instagram'),
+      };
+      formData.delete('socialLinks.facebook');
+      formData.delete('socialLinks.linkedin');
+      formData.delete('socialLinks.twitter');
+      formData.delete('socialLinks.instagram');
+      formData.set('socialLinks', JSON.stringify(socialLinks));
+      
       // Upload files first if they exist
       if (signature) {
         const signatureUrl = await uploadFile(signature);
@@ -89,8 +100,7 @@ export default function ProfilePage() {
         throw new Error(await response.text());
       }
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'Profile updated successfully',
       });
       
@@ -100,12 +110,12 @@ export default function ProfilePage() {
       if (session?.user.status === 'VERIFIED') {
         router.push('/dashboard');
       }
+      // Redirect to membership page instead of dashboard
+      router.push('/dashboard/membership');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to update profile',
-        variant: 'destructive',
       });
     } finally {
       setIsSubmitting(false);
@@ -157,7 +167,7 @@ export default function ProfilePage() {
         </CardHeader>
         <CardContent>
           {session?.user.status === 'REJECTED' && (
-            <Alert className="mb-6 bg-red-50">
+            <Alert className="mb-6 bg-red-50" variant="destructive">
               <AlertDescription>
                 Your profile was rejected. Reason: {session.user.rejectionReason}
                 Please update the required information and submit again.
@@ -251,6 +261,70 @@ export default function ProfilePage() {
               <div className="space-y-2">
                 <label>Employer Address</label>
                 <Textarea name="employerAddress" defaultValue={profile?.employerAddress || ''} />
+              </div>
+
+              {/* Add Present & Permanent Address */}
+              <div className="space-y-2">
+                <label>Present Address *</label>
+                <Textarea 
+                  name="presentAddress" 
+                  required 
+                  defaultValue={profile?.presentAddress || ''} 
+                  placeholder="Your current residential address"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label>Permanent Address *</label>
+                <Textarea 
+                  name="permanentAddress" 
+                  required 
+                  defaultValue={profile?.permanentAddress || ''} 
+                  placeholder="Your permanent residential address"
+                />
+              </div>
+
+              {/* Add Social Links */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label>Facebook Profile</label>
+                  <Input 
+                    name="socialLinks.facebook" 
+                    type="url" 
+                    placeholder="https://facebook.com/username"
+                    defaultValue={profile?.socialLinks?.facebook || ''} 
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label>LinkedIn Profile</label>
+                  <Input 
+                    name="socialLinks.linkedin" 
+                    type="url" 
+                    placeholder="https://linkedin.com/in/username"
+                    defaultValue={profile?.socialLinks?.linkedin || ''} 
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label>Twitter Profile</label>
+                  <Input 
+                    name="socialLinks.twitter" 
+                    type="url" 
+                    placeholder="https://twitter.com/username"
+                    defaultValue={profile?.socialLinks?.twitter || ''} 
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label>Instagram Profile</label>
+                  <Input 
+                    name="socialLinks.instagram" 
+                    type="url" 
+                    placeholder="https://instagram.com/username"
+                    defaultValue={profile?.socialLinks?.instagram || ''} 
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">

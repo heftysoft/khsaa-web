@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 interface FileUploadProps {
   onChange: (url: string) => void;
@@ -32,16 +32,13 @@ export function FileUpload({ onChange }: FileUploadProps) {
 
       const data = await response.json();
       onChange(data.url);
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'File uploaded successfully',
       });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to upload file',
-        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);

@@ -98,12 +98,12 @@ function EventContent({
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/40" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 to-black/40" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
           <h1 className="text-5xl font-bold text-center mb-8 max-w-3xl">{event.title}</h1>
           
           {!isPast && (
-            <div className="bg-gray-800 backdrop-blur-sm p-8 rounded-xl shadow-lg">
+            <div className="bg-gray-800 backdrop-blur-xs p-8 rounded-xl shadow-lg">
               <div className="grid grid-cols-4 gap-6 text-center mb-3">
                 <div>
                   <div className="bg-black/60 text-3xl font-bold rounded-lg p-3">
@@ -141,14 +141,14 @@ function EventContent({
       <div className="container mx-auto py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 mb-8 border">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xs p-8 mb-8 border">
               <h2 className="text-2xl font-semibold mb-6">About This Event</h2>
               <p className="whitespace-pre-wrap leading-relaxed">{event.description}</p>
             </div>
           </div>
 
           <div className="space-y-6">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xs p-6 border">
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
                   <Calendar className="h-5 w-5 text-primary" />
@@ -233,7 +233,7 @@ function EventContent({
               )}
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xs p-6 border">
               <h3 className="font-medium mb-4">Organized by</h3>
               <p className="text-sm">{event.organizer.name}</p>
             </div>

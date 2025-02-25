@@ -34,7 +34,7 @@ const responsibilities = [
 
 export function Responsibility() {
   return (
-    <section className="py-16 bg-background">
+    <section className="py-16 bg-background container-wrapper">
       <div className="container px-4 md:px-6">
         <MotionDiv
           initial={{ opacity: 0, y: 20 }}

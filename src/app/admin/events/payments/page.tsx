@@ -32,7 +32,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import Image from "next/image";
 
 interface Payment {
@@ -74,10 +74,8 @@ export default function EventPaymentsPage() {
       setPayments(data);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error('Error', {
         description: "Failed to fetch payments",
-        variant: "destructive",
       });
     }
   };
@@ -94,17 +92,14 @@ export default function EventPaymentsPage() {
 
       if (!res.ok) throw new Error("Failed to approve payment");
 
-      toast({
-        title: "Success",
+      toast.success('Success', {
         description: "Payment approved successfully",
       });
       fetchPayments();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error('Error', {
         description: "Failed to approve payment",
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -123,17 +118,14 @@ export default function EventPaymentsPage() {
 
       if (!res.ok) throw new Error("Failed to reject payment");
 
-      toast({
-        title: "Success",
+      toast.success('Success', {
         description: "Payment rejected successfully",
       });
       fetchPayments();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error('Error', {
         description: "Failed to reject payment",
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);

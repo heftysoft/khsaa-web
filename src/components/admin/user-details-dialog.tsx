@@ -13,7 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from "@/components/ui/badge";
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { UserColumn } from '@/types/admin-user';
 
 interface UserDetailsDialogProps {
@@ -35,18 +35,15 @@ export function UserDetailsDialog({ user, open, setOpen }: UserDetailsDialogProp
 
       if (!response.ok) throw new Error('Failed to verify user');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'User verified successfully',
       });
       setOpen(false);
       window.location.reload();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to verify user',
-        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -55,10 +52,8 @@ export function UserDetailsDialog({ user, open, setOpen }: UserDetailsDialogProp
 
   const handleReject = async () => {
     if (!rejectionReason) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Please provide a rejection reason',
-        variant: 'destructive',
       });
       return;
     }
@@ -75,18 +70,15 @@ export function UserDetailsDialog({ user, open, setOpen }: UserDetailsDialogProp
 
       if (!response.ok) throw new Error('Failed to reject user');
 
-      toast({
-        title: 'Success',
+      toast.success('Success', {
         description: 'User rejected successfully',
       });
       setOpen(false);
       window.location.reload();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Failed to reject user',
-        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -254,9 +246,52 @@ export function UserDetailsDialog({ user, open, setOpen }: UserDetailsDialogProp
                 </div>
               </div>
             )}
+            {/* Add Membership Information */}
+          <div className="mt-6 space-y-4">
+            <h3 className="text-lg font-semibold">Membership Information</h3>
+            <div className="grid gap-4">
+              <div className="flex justify-between">
+                <span className="font-medium">Membership Type:</span>
+                <span>{user.profile?.membershipType}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Membership Status:</span>
+                <Badge variant={user.membership?.status === 'ACTIVE' ? 'default' : 'secondary'}>
+                  {user.membership?.status}
+                </Badge>
+              </div>
+              
+              {/* Show latest membership payment details if exists */}
+              {user.membership && (
+                <>
+                  <div className="flex justify-between">
+                    <span className="font-medium">Payment Method:</span>
+                    <span>{user.membership?.paymentMethod}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium">Transaction ID:</span>
+                    <span>{user.membership?.transactionId}</span>
+                  </div>
+                  {user.membership?.paymentProof && (
+                    <div className="space-y-2">
+                      <span className="font-medium">Payment Proof:</span>
+                      <div className="relative h-40">
+                        <Image
+                          src={user.membership?.paymentProof}
+                          alt="Payment proof"
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
           </div>
 
-          {user.status === 'INPROGRESS' && (
+          {(user.status === 'INPROGRESS' || user.status === 'PAYMENT_PENDING') && (
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="rejectionReason">Rejection Reason</Label>

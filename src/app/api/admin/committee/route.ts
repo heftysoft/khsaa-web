@@ -4,12 +4,6 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const session = await auth();
-
-    if (!session?.user || session.user.role !== 'ADMIN') {
-      return new NextResponse('Unauthorized', { status: 401 });
-    }
-
     const committee = await db.committee.findMany({
       orderBy: {
         order: 'asc',

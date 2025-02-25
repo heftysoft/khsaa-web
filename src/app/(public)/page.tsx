@@ -67,8 +67,9 @@ export default function Home() {
                   src={slide.image}
                   alt="Hero image"
                   fill
-                  className="object-cover"
+                  className="object-cover blur-[2px]"
                   priority={index === 0}
+                  quality={90}
                 />
                 <div className="absolute inset-0 bg-black/40" />
                 <MotionDiv
@@ -77,18 +78,18 @@ export default function Home() {
                   transition={{ duration: 0.5 }}
                   className="absolute inset-0 flex items-center justify-center"
                 >
-                  <div className="container px-4 md:px-6 text-center text-white">
-                    <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none mb-4">
+                  <div className="container px-4 md:px-6 text-center">
+                    <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none mb-4 text-white">
                       {slide.title}
                     </h1>
-                    <p className="max-w-[600px] mx-auto text-xl mb-8">
+                    <p className="max-w-[600px] mx-auto text-xl mb-8 text-white">
                       {slide.description}
                     </p>
                     <div className="flex justify-center gap-4">
                       <Button asChild>
                         <Link href="/register">Join Now</Link>
                       </Button>
-                      <Button variant="outline" asChild className="bg-transparent dark:bg-background">
+                      <Button variant="outline" asChild>
                         <Link href="/about">Learn More</Link>
                       </Button>
                     </div>

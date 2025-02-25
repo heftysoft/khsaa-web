@@ -15,6 +15,7 @@ enum UserStatus {
   VERIFIED
   REJECTED
   INPROGRESS
+  PAYMENT_PENDING
 }
 
 model User {
@@ -62,6 +63,7 @@ model Profile {
   signature        String?
   photo            String?
   socialLinks      Json?
+  membershipType   MembershipType   @default(GENERAL)
   membershipStatus MembershipStatus @default(PENDING)
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
@@ -116,8 +118,8 @@ model EventPayment {
 
 enum MembershipType {
   GENERAL
-  DONOR
-  LIFETIME_DONOR
+  HONORABLE
+  LIFETIME
 }
 
 enum BillingPeriod {
@@ -261,4 +263,14 @@ model Gallery {
   updatedAt   DateTime @updatedAt
 
   @@index([albumId])
+}
+
+model PaymentInfo {
+  id          String   @id @default("1")
+  bankInfo    String   @db.Text
+  bkashInfo   String   @db.Text
+  nagadInfo   String   @db.Text
+  rocketInfo  String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

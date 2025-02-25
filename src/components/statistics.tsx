@@ -19,7 +19,7 @@ export default function Statistics() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.2 }}
-              className="flex flex-col items-center text-center p-8 bg-background rounded-xl shadow-sm"
+              className="flex flex-col items-center text-center p-8 bg-background rounded-xl shadow-xs"
             >
               <div className="mb-4 text-primary">{stat.icon}</div>
               <h3 className="text-4xl font-bold mb-2">

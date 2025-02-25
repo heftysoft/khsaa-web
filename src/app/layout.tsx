@@ -4,7 +4,7 @@ import "./globals.css";
 
 import type { Metadata } from "next";
 import AppProvider from "@/components/providers/app-provider";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "sonner";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
