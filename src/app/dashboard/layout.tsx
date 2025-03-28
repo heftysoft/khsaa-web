@@ -70,7 +70,7 @@ export default async function DashboardLayout({
                 </svg>
                 Profile
               </Link>
-              <Link
+              {/* <Link
                 className={`group flex items-center rounded-md px-3 py-2 text-sm font-medium ${
                   !isVerified  ? 'opacity-50 pointer-events-none' : 'hover:bg-accent hover:text-accent-foreground'
                 }`}
@@ -91,7 +91,7 @@ export default async function DashboardLayout({
                   />
                 </svg>
                 Events
-              </Link>
+              </Link> */}
               <Link
                 className={`group flex items-center rounded-md px-3 py-2 text-sm font-medium ${
                   !isVerified && !isPaymentPending ? 'opacity-50 pointer-events-none' : 'hover:bg-accent hover:text-accent-foreground'

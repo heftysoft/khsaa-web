@@ -48,7 +48,7 @@ export default async function UsersPage() {
   const formattedUsers: UserColumn[] = users.map((user) => ({
     id: user.id,
     name: user.name,
-    email: user.email,
+    email: user.email || '',
     role: user.role,
     status: user.status,
     image: user.image,

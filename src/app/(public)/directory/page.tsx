@@ -143,7 +143,6 @@ export default function DirectoryPage() {
       ))}
     </>
   );
-  console.log(filteredAlumni)
 
   return (
     <div className="container mx-auto py-8">

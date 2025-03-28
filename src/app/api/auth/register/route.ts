@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import bcrypt from "bcrypt";
+
+export const runtime ="nodejs";
 
 export async function POST(req: Request) {
   try {
@@ -17,7 +20,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const hashedPassword = password; // todo: hash password
+    // Hash password with bcrypt (10 rounds is a good default)
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user and profile in a transaction
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -19,6 +19,9 @@ export async function GET(req: Request) {
     const totalCount = await db.user.count({
       where: {
         status: 'VERIFIED',
+        profile: {
+          membershipStatus: 'ACTIVE'
+        }
       },
     });
 
@@ -26,6 +29,9 @@ export async function GET(req: Request) {
     const alumni = await db.user.findMany({
       where: {
         status: 'VERIFIED',
+        profile: {
+          membershipStatus: 'ACTIVE'
+        }
       },
       include: {
         profile: {

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Facebook, Twitter, Youtube, Linkedin, Instagram } from 'lucide-react';
+import { Facebook } from 'lucide-react';
 import Logo from '@/assets/logo.svg';
 
 export function Footer() {
@@ -21,7 +21,7 @@ export function Footer() {
                   height={60}
                 />
                 <span className="font-bold">
-                  Alumni Association
+                  KHS Alumni Association
                 </span>
               </Link>
               <p className="text-muted-foreground text-sm">
@@ -95,13 +95,16 @@ export function Footer() {
 
           <div className="mt-8 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Alumni Association of the Kurchhap High School
+              © {new Date().getFullYear()} KHS Alumni Association
             </p>
-            <div className="flex gap-4">
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
+            <p className="text-sm text-muted-foreground justify-self-center">
+              Develop & Manage by <a href="https://www.mnuworld.com" target='_blank' className="text-muted-foreground hover:text-foreground">MNUWORLD</a>
+            </p>
+            <div className="flex gap-4 min-w-[150px] justify-end">
+              <Link target='_blank' href="https://www.facebook.com/kurchaphighschoolalumniassociation" className="text-muted-foreground hover:text-foreground">
                 <Facebook className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
+              {/* <Link href="#" className="text-muted-foreground hover:text-foreground">
                 <Twitter className="h-5 w-5" />
               </Link>
               <Link href="#" className="text-muted-foreground hover:text-foreground">
@@ -112,7 +115,7 @@ export function Footer() {
               </Link>
               <Link href="#" className="text-muted-foreground hover:text-foreground">
                 <Instagram className="h-5 w-5" />
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

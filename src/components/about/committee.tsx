@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import CommitteeMember from './committee-member';
 
 type Member = {
   id: string;
@@ -42,22 +42,23 @@ const Committee = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {members.length > 0
             ? members.map((member) => (
-                <div key={member.id} className="text-center group">
-                  <div className="relative h-[300px] mb-4 overflow-hidden rounded-lg">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      fill
-                      className="object-cover transition-transform group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="bg-primary text-primary-foreground py-4 px-6 rounded-lg">
-                    <h3 className="font-bold text-lg">{member.name}</h3>
-                    <p className="text-primary-foreground/80">
-                      {member.designation}
-                    </p>
-                  </div>
-                </div>
+              <CommitteeMember key={member.id} member={member} />
+                // <div key={member.id} className="text-center group">
+                //   <div className="relative h-[300px] mb-4 overflow-hidden rounded-lg">
+                //     <Image
+                //       src={member.image}
+                //       alt={member.name}
+                //       fill
+                //       className="object-cover transition-transform group-hover:scale-105"
+                //     />
+                //   </div>
+                //   <div className="bg-primary text-primary-foreground py-4 px-6 rounded-lg">
+                //     <h3 className="font-bold text-lg">{member.name}</h3>
+                //     <p className="text-primary-foreground/80">
+                //       {member.designation}
+                //     </p>
+                //   </div>
+                // </div>
               ))
             : null}
         </div>

@@ -180,7 +180,7 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label>Full Name *</label>
-                  <Input name="name" required defaultValue={session?.user?.name || ''} />
+                  <Input name="name" required defaultValue={session?.user?.name || ''} disabled={session?.user.provider === 'google' || session?.user.provider === 'facebook'} />
                 </div>
 
                 <div className="space-y-2">
@@ -200,7 +200,7 @@ export default function ProfilePage() {
 
                 <div className="space-y-2">
                   <label>Email *</label>
-                  <Input name="email" type="email" required defaultValue={session?.user?.email || ''} disabled />
+                  <Input name="email" type="email" required defaultValue={session?.user?.email || ''} disabled={session?.user.provider !== 'facebook'} />
                 </div>
 
                 <div className="space-y-2">

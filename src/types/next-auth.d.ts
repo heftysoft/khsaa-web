@@ -14,13 +14,14 @@ declare module "next-auth" {
     rejectionReason?: string | null;
     createdAt: Date;
     updatedAt: Date;
+    accountId?: string;
+    provider?: string;
   }
 
   interface Session {
     user: User & {
-      profile?: {
-        occupation?: string | null;
-      };
+      accountId?: string;
+      provider?: string;
       membershipStatus?: MembershipStatus;
     };
   }
@@ -31,16 +32,14 @@ declare module "next-auth/jwt" {
     id: string;
     role: Role;
     status: UserStatus;
-    profile?: {
-      occupation?: string | null;
-    };
+    accountId?: string;
+    provider?: string;
     membershipStatus?: MembershipStatus;
   }
   interface Session {
     user: User & {
-      profile?: {
-        occupation?: string | null;
-      };
+      accountId?: string;
+      provider?: string;
       membershipStatus?: MembershipStatus;
     };
   }
@@ -48,9 +47,8 @@ declare module "next-auth/jwt" {
     id: string;
     role: Role;
     status: UserStatus;
-    profile?: {
-      occupation?: string | null;
-    };
+    accountId?: string;
+    provider?: string;
     membershipStatus?: MembershipStatus;
   }
 }

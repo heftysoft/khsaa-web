@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: '10mb',
     },
+    viewTransition: true,
   },
   images: {
     remotePatterns: [
@@ -22,6 +23,13 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**/*',
         search: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'platform-lookaside.fbsbx.com',
+        port: '',
+        pathname: '/**/*',
+        // search: 'asid',
       },
     ],
   },

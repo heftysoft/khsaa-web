@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { signIn } from "next-auth/react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,39 +23,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
 import GoogleIcon from "@/assets/icons/google";
 import FacebookIcon from "@/assets/icons/facebook";
 
 const formSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  password: z.string().min(1, "Password is required"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-export default function LoginForm() {
+export default function RegistrationForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showRegistered, setShowRegistered] = useState(false);
   const callbackUrl = searchParams.get("from") ?? "/dashboard";
-  const registered = searchParams.get("registered");
-
-  useEffect(() => {
-    if (registered) {
-      setShowRegistered(true);
-      const timer = setTimeout(() => {
-        setShowRegistered(false);
-      }, 10000); // Hide after 10 seconds
-
-      return () => clearTimeout(timer);
-    }
-  }, [registered]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
@@ -64,26 +51,23 @@ export default function LoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
-      setError(null);
-
-      const result = await signIn("credentials", {
-        redirect: false,
-        email: values.email,
-        password: values.password,
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
       });
 
-      if (!result?.error) {
-        router.push(callbackUrl);
-        router.refresh();
-      } else {
-        setError("Invalid email or password");
-      }
+      if (!response.ok) throw new Error("Registration failed");
+
+      router.push("/login?registered=true");
+    } catch (error) {
+      console.error("Registration error:", error);
     } finally {
       setIsLoading(false);
     }
   }
 
-  const handleSocialLogin = async (provider: string) => {
+  const handleSocialSignUp = async (provider: string) => {
     try {
       await signIn(provider, {
         callbackUrl: callbackUrl,
@@ -92,34 +76,32 @@ export default function LoginForm() {
       console.error(`Error signing in with ${provider}:`, error);
     }
   };
-
   return (
     <>
       <Card className="w-[400px] border-none shadow-lg">
         <CardHeader>
-          <CardTitle>Welcome Back</CardTitle>
-          <CardDescription>Sign in to your alumni account</CardDescription>
+          <CardTitle>Create an Account</CardTitle>
+          <CardDescription>Join our alumni community today.</CardDescription>
         </CardHeader>
         <CardContent>
-          {showRegistered && (
-            <Alert className="mb-4 text-green-500">
-              <AlertDescription className="border-green-500">
-                Registration successful! Please sign in.
-              </AlertDescription>
-            </Alert>
-          )}
-          {error && (
-            <Alert className="mb-4" variant="destructive">
-              <AlertDescription>
-                {error}
-              </AlertDescription>
-            </Alert>
-          )}
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4 mb-4"
             >
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
@@ -150,8 +132,12 @@ export default function LoginForm() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
-                {isLoading ? "Signing in..." : "Sign In"}
+              <Button
+                type="submit"
+                className="w-full cursor-pointer"
+                disabled={isLoading}
+              >
+                {isLoading ? "Creating account..." : "Register"}
               </Button>
             </form>
           </Form>
@@ -170,7 +156,7 @@ export default function LoginForm() {
               type="button"
               variant="outline"
               className="w-full cursor-pointer"
-              onClick={() => handleSocialLogin("google")}
+              onClick={() => handleSocialSignUp("google")}
             >
               Continue with Google <GoogleIcon className="w-4 h-4" />
             </Button>
@@ -178,7 +164,7 @@ export default function LoginForm() {
               type="button"
               variant="outline"
               className="w-full cursor-pointer"
-              onClick={() => handleSocialLogin("facebook")}
+              onClick={() => handleSocialSignUp("facebook")}
             >
               Continue with Facebook <FacebookIcon className="w-4 h-4" />
             </Button>
@@ -188,9 +174,9 @@ export default function LoginForm() {
       <Card className="w-[400px] mt-4">
         <CardContent className="p-2">
           <div className="flex items-center justify-center gap-2">
-            <CardDescription>Don&apos;t have an account?</CardDescription>
-            <Link type="button" className="text-sm" href="/register">
-              Register →
+            <CardDescription>Already have an account?</CardDescription>
+            <Link type="button" className="text-sm" href="/login">
+              Sign In →
             </Link>
           </div>
         </CardContent>

@@ -74,7 +74,7 @@ export function UserActions({ user }: UserActionsProps) {
 
     try {
       setLoading(true);
-      const response = await fetch(`/api/users/${user.id}`, {
+      const response = await fetch(`/api/admin/users/${user.id}`, {
         method: 'DELETE',
       });
 
@@ -89,6 +89,31 @@ export function UserActions({ user }: UserActionsProps) {
       toast.error('Error', {
         description: 'Failed to delete user',
       });
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleUpdateUserSubscription = async (action: 'ACTIVATE' | 'CANCEL' | 'PENDING') => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/admin/users/${user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          action
+        })
+      });
+      if (!response.ok) throw new Error('Failed to update subscription status');
+
+      toast.success('Success', {
+        description: 'User subscription updated successfully',
+      });
+      window.location.reload();
+    } catch (error) {
+      console.error('Error updating user subscription:', error);
+      toast.error('Error updating user subscription');
     } finally {
       setLoading(false);
     }
@@ -119,6 +144,27 @@ export function UserActions({ user }: UserActionsProps) {
               </DropdownMenuItem>
             </>
           )}
+          <DropdownMenuItem
+            onClick={() => handleUpdateUserSubscription("ACTIVATE")}
+            disabled={loading}
+            className="text-green-600"
+          >
+            Activate User Subscription
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => handleUpdateUserSubscription("PENDING")}
+            disabled={loading}
+            className="text-yellow-600"
+          >
+            Revert User Subscription
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => handleUpdateUserSubscription("CANCEL")}
+            disabled={loading}
+            className="text-red-600"
+          >
+            Cancel User Subscription
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={handleDelete}
             disabled={loading}
